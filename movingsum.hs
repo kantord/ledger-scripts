@@ -20,6 +20,7 @@ parseArg = do
     (arg:_) <- getArgs
     return (read arg :: Int)
 
+main :: IO ()
 main = do
     windowSize <- parseArg
     interact $ doublify (movingAvg windowSize)
