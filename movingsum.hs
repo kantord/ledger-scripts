@@ -24,4 +24,9 @@ movingAvg windowSize xs
 
 main_ windowSize = interact $ doublify (movingAvg windowSize)
 
-main = main_ 30
+parseArg :: IO (Int)
+parseArg = do
+    (arg:_) <- getArgs
+    return (read arg :: Int)
+
+main = parseArg >>= main_
