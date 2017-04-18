@@ -57,8 +57,8 @@ reports/food_moving.txt: ./reports/food.txt ./movingsum
 reports/drinks_moving.txt: ./reports/drinks.txt ./movingsum
 	bash -c "paste -d' ' <(cat '$<' | cut -f1 -d' ') <(cat '$<' | cut -f2 -d' ' | ./movingsum 30)" > $@
 
-#reports/weekly_change_moving.txt: ./reports/weekly_change.txt ./movingsum7
-	#bash -c "paste -d' ' <(cat '$<' | cut -f1 -d' ') <(cat '$<' | cut -f2 -d' ' | ./movingsum7)" > $@
+reports/weekly_change_moving.txt: ./reports/weekly_change.txt ./movingsum7
+	bash -c "paste -d' ' <(cat '$<' | cut -f1 -d' ') <(cat '$<' | cut -f2 -d' ' | ./movingsum 4)" > $@
 
 graphs/daily_totals.png: reports/daily_totals.txt ./plot.sh
 	./plot.sh "$<" "$@"
