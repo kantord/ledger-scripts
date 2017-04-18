@@ -22,4 +22,6 @@ movingAvg windowSize xs
     {-putStr ((process 30) contents) where-}
         {-process = \x -> doublify (movingAvg x)-}
 
-main = interact $ doublify (movingAvg 30)
+main_ windowSize = interact $ doublify (movingAvg windowSize)
+
+main = main_ 30
