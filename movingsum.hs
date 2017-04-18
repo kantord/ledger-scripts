@@ -15,13 +15,6 @@ movingAvg windowSize xs
     where
         movingSums = movingSum (take windowSize xs) (drop windowSize xs)
 
-{-main = do-}
-    {-[windowSizeString] <- getArgs-}
-    {-windowSize <- read windowSizeString :: Int-}
-    {-contents <- getContents-}
-    {-putStr ((process 30) contents) where-}
-        {-process = \x -> doublify (movingAvg x)-}
-
 main_ windowSize = interact $ doublify (movingAvg windowSize)
 
 parseArg :: IO (Int)
