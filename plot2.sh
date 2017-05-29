@@ -77,7 +77,7 @@ gnuplot <<- EOF
     set xdata time
     set timefmt "%Y-%m-%d"
     set output "$3"
-    set term png
+    set term png size 1000,600
 
     plot "$1" using 1:2 with lines, \
          "$2" using 1:2 with lines
