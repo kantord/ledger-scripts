@@ -33,9 +33,6 @@ gnuplot <<- EOF
     my_axis_width = "1.5"
     my_ps = "1.2"
 
-    set term wxt enhanced font my_font
-    set pointsize my_ps
-
     set style line 1 linecolor rgbcolor blue_025 linewidth @my_line_width pt 7
     set style line 2 linecolor rgbcolor green_025 linewidth @my_line_width pt 5
     set style line 3 linecolor rgbcolor red_025 linewidth @my_line_width pt 9
