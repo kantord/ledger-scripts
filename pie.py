@@ -1,6 +1,10 @@
-import matplotlib.pyplot as plt
+import matplotlib
 import csv
 import sys
+
+matplotlib.use('Agg')
+
+import matplotlib.pyplot as plt
 
 with open(sys.argv[1]) as inp:
     csvf = list(csv.reader(inp))
