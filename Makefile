@@ -14,7 +14,7 @@ graphs/: graphs/daily_totals.png graphs/daily_totals_moving.png \
 	graphs/daily_totals_comparison_90.png \
 	graphs/bkv.png graphs/food_vs_drinks.png graphs/expenses.png  graphs/pie.png \
 	graphs/bar.png graphs/food.png graphs/drinks.png graphs/payees.png \
-	graphs/daily_savings_comparison.png
+	graphs/daily_savings_comparison.png graphs/stacked.png
 
 reports/daily_totals.txt: ./ledge.txt
 	ledger -f ledge.txt reg -D Assets -n -J --sort d -X Ft > $@
@@ -134,3 +134,6 @@ graphs/food.png: reports/food.txt ./bar.sh
 graphs/payees.png: reports/payees.txt ./bar.sh
 	./bar.sh "$<" "$@"
 
+
+graphs/stacked.png: ledge.txt
+	ledger -f $< reg -M Expenses  --sort d -X Ft  --no-rounding -F '%D,,,%A,,,%t\n' | sed "s/ Ft$$//" | python stacked.py $@
