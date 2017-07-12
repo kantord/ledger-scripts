@@ -75,7 +75,7 @@ gnuplot <<- EOF
 
     set datafile sep " "
     set output "$2"
-    set term png
+    set term png size 1000, 600
     set format y "%f" 
     set format x "%s" 
     set boxwidth 0.5

@@ -123,7 +123,7 @@ graphs/drinks.png: reports/drinks.txt pie.py
 	python pie.py $< $@
 
 reports/bar.txt: reports/pie.txt ./aggrhead
-	cat $< | sort --key 1 -t',' --numeric -r | sed "s/,/ /" | ./aggrhead 14 > $@
+	cat $< | sort --key 1 -t',' --numeric -r | sed "s/,/ /" | ./aggrhead 25 > $@
 
 graphs/bar.png: reports/bar.txt ./bar.sh
 	./bar.sh "$<" "$@"
