@@ -135,5 +135,5 @@ graphs/payees.png: reports/payees.txt ./bar.sh
 	./bar.sh "$<" "$@"
 
 
-graphs/stacked.png: ledge.txt
-	ledger -f $< reg -M Expenses  --sort d -X Ft  --no-rounding -F '%D,,,%A,,,%t\n' | sed "s/ Ft$$//" | python stacked.py $@
+graphs/stacked.png: ledge.txt stacked.py
+	ledger -f $< reg -M Expenses Taxes Income --sort d -X Ft  --no-rounding -F '%D,,,%A,,,%t\n' | sed "s/ Ft$$//" | python stacked.py $@

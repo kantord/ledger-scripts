@@ -5,8 +5,11 @@ import matplotlib
 import collections
 import sys
 import csv
+from math import sqrt, ceil
+from matplotlib.ticker import FuncFormatter
 
 
+N_CATS = 6
 matplotlib.style.use('ggplot')
 
 
@@ -18,16 +21,24 @@ sums_per_group = collections.defaultdict(float)
 labels = set()
 index = []
 last_month = None
+incomes = collections.defaultdict(float)
+totals = collections.defaultdict(float)
 for row in sys.stdin:
     row = row.split(",,,")
-    group_ = get_group(row[1])
-    labels.add(group_)
-    last_month = row[0]
-    sums_per_month[row[0]][group_] += float(row[2])
-    sums_per_group[group_] += float(row[2])
+    if row[1].startswith("Taxes"):
+        row[1] = "Taxes:Taxes"
+    if row[1].startswith("Income"):
+        incomes[row[0]] += float(row[2])
+    else:
+        group_ = get_group(row[1])
+        labels.add(group_)
+        last_month = row[0]
+        sums_per_month[row[0]][group_] += float(row[2])
+        sums_per_group[group_] += float(row[2])
+        totals[row[0]] += float(row[2])
 
 labels = sorted(labels, key=lambda l: -sum(sums_per_month[x][l] for x in sums_per_month.keys()))
-labels = tuple(labels[:5]) + ("Other", )
+labels = tuple(labels[:N_CATS]) + ("Other", )
 
 simplified_sums_per_month = collections.defaultdict(
     lambda: collections.defaultdict(float))
@@ -48,17 +59,27 @@ for month, sums in simplified_sums_per_month.items():
 
 
 stds = {
-    group_:np.std(values)/sum(values) for group_, values in simplified_sums_per_group.items()
+    group_:np.std(values)/sqrt(sum(values)) for group_, values in simplified_sums_per_group.items()
 }
 
 
-labels = sorted(labels, key=lambda l: stds[l])
+labels = tuple(sorted(labels, key=lambda l: stds[l])) + ("Cash flow", )
 
+
+for month, income in incomes.items():
+    if "'" + month[2:7] not in index:
+        continue
+    spent = totals[month]
+    unspent = -income - spent
+    simplified_sums_per_month[month]["Cash flow"] = unspent
 
 df = pd.DataFrame([
     [sums[label] for label in labels]
     for month, sums in simplified_sums_per_month.items()
 ], columns=labels, index=index)
+
+
+print(df)
 
 
 
@@ -75,12 +96,21 @@ for i in range(len(tableau20)):
     tableau20[i] = (r / 255., g / 255., b / 255.)
 
 
+def thousands(x, pos):
+    return '%dK' % (x*1e-3)
 
 
-ax = df.plot(kind='area', color = tableau20, alpha=.7, title="Title Goes Here");
+ax = df.plot(kind='barh', stacked=True, color=tableau20, alpha=.85, title="Monthly spending by category");
 
+formatter = FuncFormatter(thousands)
+ax.xaxis.set_major_formatter(formatter)
 
-ax.set_xlabel("x axis units")
-ax.set_ylabel("y axis units")
+plt.axvline(0, color='black')
+
+ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
+        fancybox=True, shadow=False, ncol=ceil((N_CATS + 2) / 2))
+
+plt.tight_layout()
+plt.subplots_adjust(bottom=0.25)
 
 plt.savefig(sys.argv[1])
