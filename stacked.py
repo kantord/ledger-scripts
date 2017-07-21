@@ -9,7 +9,7 @@ from math import sqrt, ceil
 from matplotlib.ticker import FuncFormatter
 
 
-N_CATS = 6
+N_CATS = 8
 matplotlib.style.use('ggplot')
 
 
