@@ -96,7 +96,7 @@ reports/expenses.txt: ./ledge.txt
 	ledger -f $< bal "Expenses" --depth 2 -B --no-total -X Ft| tail -n +2 | sed "s/^ *//" | sed "s/ Ft  /,/" | sed "s/Expenses\://" | sed "s/Expenses\://" | sed "s/, \+/,/" > $@ 
 
 reports/food.txt: ./ledge.txt
-	ledger -f $< bal "Expenses:Food" --depth 3 -B --no-total -X Ft| tail -n +2 | sed "s/^ *//" | sed "s/ Ft  /,/" | sed "s/Expenses\://" | sed "s/Expenses\://" | sed "s/, \+/,/" | sort --key 1 -t',' --numeric -r | sed "s/,/ /" | ./aggrhead 10 > $@ 
+	ledger -f $< bal "Expenses:Food" --depth 3 -B --no-total -X Ft| tail -n +2 | sed "s/^ *//" | sed "s/ Ft  /,/" | sed "s/Expenses\://" | sed "s/Expenses\://" | sed "s/, \+/,/" | sort --key 1 -t',' --numeric -r | sed "s/,/ /" | tail -n +2 | ./aggrhead 50 > $@ 
 
 reports/drinks.txt: ./ledge.txt
 	ledger -f $< bal "Expenses:Drinks" --depth 3 -B --no-total -X Ft| tail -n +2 | sed "s/^ *//" | sed "s/ Ft  /,/" | sed "s/Expenses\://" | sed "s/Expenses\://" | sed "s/, \+/,/" > $@ 
