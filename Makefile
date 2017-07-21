@@ -17,10 +17,10 @@ graphs/: graphs/daily_totals.png graphs/daily_totals_moving.png \
 	graphs/daily_savings_comparison.png graphs/stacked.png
 
 reports/daily_totals.txt: ./ledge.txt
-	ledger -f ledge.txt reg -D Assets -n -J --sort d -X Ft > $@
+	ledger -f ledge.txt reg -D Assets -n -J --sort d -X Ft | python ./fill_date_gaps.py > $@
 
 reports/daily_savings.txt: ./ledge.txt
-	ledger -f ledge.txt reg -D Savings -n -J --sort d  -X Ft> $@
+	ledger -f ledge.txt reg -D Savings -n -J --sort d  -X Ft | python ./fill_date_gaps.py> $@
 
 reports/daily_change.txt: ./ledge.txt
 	ledger -f ledge.txt reg -D Assets -n -j --sort d -X Ft > $@
