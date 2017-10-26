@@ -22,6 +22,8 @@ def repeat_line(line):
 
 last_line = None
 for line in reader:
+    if len(line) == 1:
+        line = (line[0], 0)
     if last_line:
         while parse_date(line[0]) > next_date(last_line[0]):
             last_line = repeat_line(last_line)

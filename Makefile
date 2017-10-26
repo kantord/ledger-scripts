@@ -48,7 +48,7 @@ graphs/food_vs_drinks.png: reports/food_vs_drinks.txt lines.gnuplot
 	lines.gnuplot
 
 days.txt: ledge.txt
-	ledger -f $< reg -j | cut -f1 -d' ' | sort | uniq > $@
+	ledger -f $< reg -j | cut -f1 -d' ' | sort | uniq | python fill_date_gaps.py | cut -f1 -d' ' > $@
 
 pricedb/%:
 	curl http://api.fixer.io/$*\?base\=EUR | jq '.base as $$base | .date as $$date | .rates | to_entries | map(["P", $$date, .key, ((1 / .value) | tostring), $$base] | join (" ")) | .[]' -r | sed 's USD $$ ; s HUF Ft ; s - / g' > $@
