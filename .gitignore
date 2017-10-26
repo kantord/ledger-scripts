@@ -11,3 +11,7 @@ reports/
 /ledge.txt.bak
 /new_ledge.txt
 /dedup_rules.csv
+pricedb/
+/days.txt
+/price.db
+/selection.txt
