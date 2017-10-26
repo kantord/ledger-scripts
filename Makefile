@@ -15,7 +15,7 @@ reports/daily_savings_moving.txt: ./reports/daily_savings.txt ./movingsum price.
 	bash -c "paste -d' ' <(tac '$<' | cut -f1 -d' ') <(tac '$<' | cut -f2 -d' ' | ./movingsum 30)" > $@
 
 reports/income_expense_comparison.txt: ./ledge.txt price.db
-	bash -c "join <(ledger -f $^ reg Income -n -M -X EUR --no-rounding -j | sed 's/ -/ /') <(ledger -f $^ reg Expenses Taxes -n -M -X EUR --no-rounding -j )" > $@
+	bash -c "join <(ledger -f $< reg Income -n -M -X EUR --no-rounding -j | sed 's/ -/ /') <(ledger -f $< reg Expenses Taxes -n -M -X EUR --no-rounding -j )" > $@
 
 
 graphs/daily_totals_comparison.png: reports/daily_totals_moving.txt reports/daily_totals.txt ./plot2.sh
