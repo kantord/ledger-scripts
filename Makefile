@@ -1,6 +1,6 @@
 all: reports/ graphs/ price.db
 reports/: reports/daily_totals.txt
-graphs/: graphs/daily_totals_comparison.png graphs/daily_savings_comparison.png graphs/stacked.png graphs/income_expense_comparison.png
+graphs/: graphs/daily_totals_comparison.png graphs/daily_savings_comparison.png graphs/stacked.png graphs/income_expense_comparison.png graphs/books_drinks_comparison.png
 
 reports/daily_totals.txt: ./ledge.txt price.db
 	ledger -f ledge.txt reg -D Assets -n -J --sort d -X Ft | python ./fill_date_gaps.py > $@
@@ -16,6 +16,11 @@ reports/daily_savings_moving.txt: ./reports/daily_savings.txt ./movingsum price.
 
 reports/income_expense_comparison.txt: ./ledge.txt price.db
 	bash -c "join <(ledger -f $< reg Income -n -M -X EUR --no-rounding -j | sed 's/ -/ /') <(ledger -f $< reg Expenses Taxes -n -M -X EUR --no-rounding -j )" > $@
+
+
+reports/books_drinks_comparison.txt: ./ledge.txt price.db
+	bash -c "join <(ledger -f $< reg Expenses:Books Expenses:Learning -n -M -X EUR --no-rounding -j | sed 's/ -/ /') <(ledger -f $< reg Expenses:Drinks -n -M -X EUR --no-rounding -j )" > $@
+
 
 
 graphs/daily_totals_comparison.png: reports/daily_totals_moving.txt reports/daily_totals.txt ./plot2.sh
@@ -39,6 +44,16 @@ graphs/income_expense_comparison.png: reports/income_expense_comparison.txt line
 			-e "line2_name='Expenses and taxes'" \
 			-e "output_file='$@'" \
 	lines.gnuplot
+
+
+graphs/books_drinks_comparison.png: reports/books_drinks_comparison.txt lines.gnuplot
+	gnuplot -e "input_file='$<'" \
+			-e "line1_name='Books and learning'" \
+			-e "line2_name='Drinks'" \
+			-e "output_file='$@'" \
+	lines.gnuplot
+
+
 
 graphs/food_vs_drinks.png: reports/food_vs_drinks.txt lines.gnuplot
 	gnuplot -e "input_file='$<'" \

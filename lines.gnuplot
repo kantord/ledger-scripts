@@ -3,7 +3,7 @@
 reset
 
 set datafile separator " "
-set terminal pngcairo size 710,250 enhanced font 'Verdana,9'
+set terminal pngcairo size 910,250 enhanced font 'Verdana,9'
 set style line 11 lc rgb '#808080' lt 1
 set border 3 back ls 11
 set tics nomirror
